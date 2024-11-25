@@ -1,7 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Award } from "lucide-react";
-import { EditableText } from "../editableText";
 import { EditableList } from "../editableList";
+import { EditableText } from "../editableText";
 
 interface ProfessionalSummaryProps {
   content: string;
@@ -18,14 +16,11 @@ export const ProfessionalSummary: React.FC<ProfessionalSummaryProps> = ({
   onUpdateContent,
   onUpdateHighlights,
 }) => (
-  <Card>
-    <CardHeader>
-      <CardTitle className="flex items-center gap-2">
-        <Award className="h-5 w-5" />
-        Professional Summary
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
+  <section>
+    <h2 className="text-xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+      SUMMARY
+    </h2>
+    <div className="space-y-4">
       <EditableText
         value={content}
         onChange={onUpdateContent}
@@ -33,13 +28,13 @@ export const ProfessionalSummary: React.FC<ProfessionalSummaryProps> = ({
         multiline
       />
       <div>
-        <h4 className="font-semibold mb-2">Key Highlights</h4>
+        <h3 className="font-semibold mt-3 mb-2">Key Highlights</h3>
         <EditableList
           items={highlights}
           onChange={onUpdateHighlights}
           isEditing={isEditing}
         />
       </div>
-    </CardContent>
-  </Card>
+    </div>
+  </section>
 );

@@ -7,6 +7,7 @@ interface EditableTextProps {
   onChange: (value: string) => void;
   isEditing: boolean;
   multiline?: boolean;
+  className?: string;
 }
 
 export const EditableText: React.FC<EditableTextProps> = ({
@@ -14,6 +15,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   onChange,
   isEditing,
   multiline = false,
+  className,
 }) => {
   if (!isEditing) {
     return <div className="whitespace-pre-wrap">{value}</div>;
@@ -23,7 +25,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
     <Textarea
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="min-h-[100px]"
+      className={`min-h-[100px] ${className}`}
     />
   ) : (
     <Input value={value} onChange={(e) => onChange(e.target.value)} />

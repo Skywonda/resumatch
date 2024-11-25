@@ -1,5 +1,16 @@
-// types/index.ts
+export interface ResumeHeader {
+  name: string;
+  title: string;
+  contacts: {
+    phone: string;
+    linkedin: string;
+    email: string;
+    location: string;
+  };
+}
+
 export interface ResumeData {
+  header: ResumeHeader;
   enhancedContent: {
     professionalSummary: {
       content: string;
@@ -41,4 +52,17 @@ export interface Section {
   icon: React.FC;
 }
 
-// Add more type definitions as needed...
+export interface ExperiencePosition {
+  role: string;
+  company: string;
+  duration: string;
+  achievements: string[];
+  impactMetrics: string[];
+}
+
+export interface EducationEntry {
+  degree: string;
+  institution: string;
+  year: string | null;
+  highlights: string[];
+}

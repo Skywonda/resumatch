@@ -10,12 +10,12 @@ const navigationItems = [
     icon: LayoutDashboard,
   },
   {
-    path: "/dashboard/enhance",
+    path: "/dashboard/enhance-resume",
     label: "Resume Enhancement",
     icon: FileText,
   },
   {
-    path: "/dashboard/tailor",
+    path: "/dashboard/tailor-resume",
     label: "Resume Tailoring",
     icon: GraduationCap,
   },

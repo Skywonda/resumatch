@@ -1,9 +1,22 @@
-// hooks/useResumeData.ts
 import { useState } from "react";
-import type { ResumeData } from "../types/resume";
+import type { ResumeData, ResumeHeader } from "../types/resume";
 
 export function useResumeData(initialData: ResumeData) {
   const [resumeData, setResumeData] = useState<ResumeData>(initialData);
+
+  const updateHeader = (updates: Partial<ResumeHeader>) => {
+    setResumeData((prev) => ({
+      ...prev,
+      header: {
+        ...prev.header,
+        ...updates,
+        contacts: {
+          ...prev.header.contacts,
+          ...(updates.contacts || {}),
+        },
+      },
+    }));
+  };
 
   const updateProfessionalSummary = (content: string) => {
     setResumeData((prev) => ({
@@ -85,28 +98,11 @@ export function useResumeData(initialData: ResumeData) {
 
   return {
     resumeData,
+    updateHeader,
     updateProfessionalSummary,
     updateProfessionalHighlights,
     updateExperiencePosition,
     updateEducationEntry,
     updateSkills,
   };
-}
-
-// hooks/useResumeExport.ts
-export function useResumeExport() {
-  const exportToJson = (data: any) => {
-    const jsonString = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonString], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "resume.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  return { exportToJson };
 }

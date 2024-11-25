@@ -1,10 +1,7 @@
-// components/sections/Experience.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Briefcase, PlusCircle } from "lucide-react";
-import type { ResumeData } from "../../types/resume";
+import { PlusCircle } from "lucide-react";
+import { Button } from "../ui/button";
 import { EditableText } from "../editableText";
-import { EditableList } from "../editableList";
+import { ResumeData } from "@/types/resume";
 
 interface ExperienceProps {
   positions: ResumeData["enhancedContent"]["experience"]["positions"];
@@ -33,71 +30,63 @@ export const Experience: React.FC<ExperienceProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <Briefcase className="h-5 w-5" />
-          Professional Experience
-        </CardTitle>
+    <section>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4 flex-grow">
+          PROFESSIONAL EXPERIENCE
+        </h2>
         {isEditing && (
-          <Button variant="outline" size="sm" onClick={addPosition}>
+          <Button variant="ghost" size="sm" onClick={addPosition}>
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Position
           </Button>
         )}
-      </CardHeader>
-      <CardContent className="space-y-6">
+      </div>
+      <div className="space-y-6">
         {positions.map((position, index) => (
-          <div
-            key={`${position.company}-${index}`}
-            className="space-y-4 pb-4 border-b last:border-0"
-          >
-            <div className="flex justify-between items-start gap-4">
-              <div className="space-y-1 flex-grow">
+          <div key={`${position.company}-${index}`} className="space-y-2">
+            <div className="flex justify-between items-start">
+              <div>
                 <EditableText
                   value={position.role}
                   onChange={(role) => onUpdatePosition(index, { role })}
                   isEditing={isEditing}
+                  className="font-bold text-gray-800"
                 />
                 <EditableText
                   value={position.company}
                   onChange={(company) => onUpdatePosition(index, { company })}
                   isEditing={isEditing}
+                  className="text-blue-600"
                 />
               </div>
-              <div className="min-w-[120px]">
-                <EditableText
-                  value={position.duration}
-                  onChange={(duration) => onUpdatePosition(index, { duration })}
-                  isEditing={isEditing}
-                />
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-2">Achievements</h4>
-              <EditableList
-                items={position.achievements}
-                onChange={(achievements) =>
-                  onUpdatePosition(index, { achievements })
-                }
+              <EditableText
+                value={position.duration}
+                onChange={(duration) => onUpdatePosition(index, { duration })}
                 isEditing={isEditing}
+                className="text-gray-600 text-sm"
               />
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-2">Impact Metrics</h4>
-              <EditableList
-                items={position.impactMetrics}
-                onChange={(impactMetrics) =>
-                  onUpdatePosition(index, { impactMetrics })
-                }
-                isEditing={isEditing}
-              />
-            </div>
+            <ul className="list-disc pl-5 space-y-1 text-gray-600">
+              {position.achievements.map((achievement, i) => (
+                <li key={i}>
+                  <EditableText
+                    value={achievement}
+                    onChange={(newValue) => {
+                      const newAchievements = [...position.achievements];
+                      newAchievements[i] = newValue;
+                      onUpdatePosition(index, {
+                        achievements: newAchievements,
+                      });
+                    }}
+                    isEditing={isEditing}
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };

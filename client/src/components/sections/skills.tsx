@@ -1,8 +1,4 @@
-// components/sections/Skills.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Terminal } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import type { ResumeData } from "../../types/resume";
+import { ResumeData } from "@/types/resume";
 import { EditableList } from "../editableList";
 
 interface SkillsProps {
@@ -26,17 +22,14 @@ export const Skills: React.FC<SkillsProps> = ({
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Terminal className="h-5 w-5" />
-          Skills
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <section>
+      <h2 className="text-xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+        SKILLS
+      </h2>
+      <div className="space-y-4">
         {skillCategories.map(({ key, label }) => (
           <div key={key}>
-            <h4 className="font-semibold mb-2">{label}</h4>
+            <h3 className="font-semibold mb-2">{label}</h3>
             {isEditing ? (
               <EditableList
                 items={skills[key]}
@@ -46,15 +39,18 @@ export const Skills: React.FC<SkillsProps> = ({
             ) : (
               <div className="flex flex-wrap gap-2">
                 {skills[key].map((skill, index) => (
-                  <Badge key={index} variant="secondary">
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-gray-100 rounded-md text-sm text-gray-700"
+                  >
                     {skill}
-                  </Badge>
+                  </span>
                 ))}
               </div>
             )}
           </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };

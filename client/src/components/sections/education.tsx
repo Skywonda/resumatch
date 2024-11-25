@@ -1,10 +1,7 @@
-// components/sections/Education.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { GraduationCap, PlusCircle } from "lucide-react";
-import type { ResumeData } from "../../types/resume";
+import { PlusCircle } from "lucide-react";
+import { Button } from "../ui/button";
 import { EditableText } from "../editableText";
-import { EditableList } from "../editableList";
+import { ResumeData } from "@/types/resume";
 
 interface EducationProps {
   entries: ResumeData["enhancedContent"]["education"]["entries"];
@@ -30,31 +27,28 @@ export const Education: React.FC<EducationProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
-          <GraduationCap className="h-5 w-5" />
-          Education
-        </CardTitle>
+    <section>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4 flex-grow">
+          EDUCATION
+        </h2>
         {isEditing && (
-          <Button variant="outline" size="sm" onClick={addEntry}>
+          <Button variant="ghost" size="sm" onClick={addEntry}>
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Education
           </Button>
         )}
-      </CardHeader>
-      <CardContent className="space-y-6">
+      </div>
+      <div className="space-y-4">
         {entries.map((entry, index) => (
-          <div
-            key={`${entry.institution}-${index}`}
-            className="space-y-4 pb-4 border-b last:border-0"
-          >
-            <div className="flex justify-between items-start gap-4">
-              <div className="space-y-1 flex-grow">
+          <div key={`${entry.institution}-${index}`}>
+            <div className="flex justify-between">
+              <div>
                 <EditableText
                   value={entry.degree}
                   onChange={(degree) => onUpdateEntry(index, { degree })}
                   isEditing={isEditing}
+                  className="font-bold text-gray-800"
                 />
                 <EditableText
                   value={entry.institution}
@@ -62,34 +56,21 @@ export const Education: React.FC<EducationProps> = ({
                     onUpdateEntry(index, { institution })
                   }
                   isEditing={isEditing}
+                  className="text-blue-600"
                 />
               </div>
               {entry.year && (
-                <div className="min-w-[100px]">
-                  <EditableText
-                    value={entry.year}
-                    onChange={(year) => onUpdateEntry(index, { year })}
-                    isEditing={isEditing}
-                  />
-                </div>
+                <EditableText
+                  value={entry.year}
+                  onChange={(year) => onUpdateEntry(index, { year })}
+                  isEditing={isEditing}
+                  className="text-gray-600 text-sm"
+                />
               )}
             </div>
-
-            {entry.highlights.length > 0 && (
-              <div>
-                <h4 className="font-semibold mb-2">Highlights</h4>
-                <EditableList
-                  items={entry.highlights}
-                  onChange={(highlights) =>
-                    onUpdateEntry(index, { highlights })
-                  }
-                  isEditing={isEditing}
-                />
-              </div>
-            )}
           </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };
