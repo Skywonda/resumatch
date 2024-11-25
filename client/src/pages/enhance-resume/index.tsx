@@ -6,59 +6,94 @@ import { ResumeUpload } from "@/components/resume-upload";
 import { BriefcaseIcon, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ProfessionalSelect } from "./professional-select";
-import {
-  PROFESSIONAL_LEVELS,
-  type ProfessionalLevelId,
-} from "./professional-levels";
+import { ProfessionalLevelId } from "./professional-levels";
 import { EnhancementResults } from "./enhancement-results";
+import { validateResumeAnalysis } from "@/lib/utils/validation";
+import extractTextFromFile from "@/lib/utils/file-text-extractor";
+import { resumeEnhancement } from "@/lib/utils/api";
+
+interface EnhancementResult {
+  enhancedContent: {
+    professionalSummary: {
+      content: string;
+      highlights: string[];
+    };
+    experience: {
+      positions: {
+        role: string;
+        company: string;
+        duration: string;
+        achievements: string[];
+        impactMetrics: string[];
+      }[];
+    };
+    skills: {
+      technical: string[];
+      domain: string[];
+      leadership: string[];
+    };
+    education: {
+      entries: {
+        degree: string;
+        institution: string;
+        year: string | null;
+        highlights: string[];
+      }[];
+    };
+  };
+  optimization: {
+    keyStrengths: string[];
+    impactMetrics: string[];
+    uniqueValue: string[];
+  };
+}
 
 export default function Enhance() {
   const [resume, setResume] = useState<File | null>(null);
   const [professionalLevel, setProfessionalLevel] =
     useState<ProfessionalLevelId>();
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<EnhancementResult | null>(null);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
-    if (!resume || !professionalLevel) {
-      toast({
-        title: "Missing information",
-        description:
-          "Please upload your resume and select your professional level",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
-      // Get the selected level details
-      const selectedLevel = PROFESSIONAL_LEVELS.find(
-        (level) => level.id === professionalLevel
+      const validation = validateResumeAnalysis(resume, professionalLevel);
+      if (validation) {
+        toast({
+          title: "Validation Error",
+          description: validation,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!professionalLevel || !resume) {
+        throw new Error(
+          "Please select your professional level and upload your resume"
+        );
+      }
+
+      const resumeText = await extractTextFromFile(resume);
+      const { text }: { text: any } = await resumeEnhancement(
+        resumeText,
+        professionalLevel
       );
 
-      if (!selectedLevel) throw new Error("Invalid professional level");
+      try {
+        setResult(text);
 
-      // Here you would send resume and professionalLevel to your API
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      setResult(`
-# Resume Enhancement Suggestions for ${selectedLevel.label}
-
-## Key Focus Areas
-${selectedLevel.details.focusAreas.map((area) => `- ${area}`).join("\n")}
-
-## Skills Emphasis
-${selectedLevel.details.skillEmphasis.map((skill) => `- ${skill}`).join("\n")}
-
-## Recommended Improvements
-- Align experience descriptions with ${selectedLevel.label} expectations
-- Highlight achievements relevant to your experience level
-- Optimize keywords for ${selectedLevel.label} positions
-      `);
+        toast({
+          title: "Enhancement Complete",
+          description: "Your resume has been successfully enhanced!",
+        });
+      } catch (parseError) {
+        console.error("Failed to parse API response:", parseError);
+        throw new Error("Unable to process the enhancement results");
+      }
     } catch (error) {
+      console.error("Resume enhancement error:", error);
       toast({
         title: "Enhancement failed",
         description:
@@ -70,8 +105,10 @@ ${selectedLevel.details.skillEmphasis.map((skill) => `- ${skill}`).join("\n")}
     }
   };
 
+  const canSubmit = Boolean(resume && professionalLevel && !isLoading);
+
   const inputContent = (
-    <>
+    <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -102,7 +139,7 @@ ${selectedLevel.details.skillEmphasis.map((skill) => `- ${skill}`).join("\n")}
           />
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 
   return (
@@ -114,16 +151,8 @@ ${selectedLevel.details.skillEmphasis.map((skill) => `- ${skill}`).join("\n")}
         buttonText="Enhance Resume"
         isLoading={isLoading}
         onSubmit={handleSubmit}
-        result={
-          result ? (
-            <EnhancementResults
-              result={result}
-              level={
-                PROFESSIONAL_LEVELS.find((l) => l.id === professionalLevel)!
-              }
-            />
-          ) : null
-        }
+        // isSubmitDisabled={!canSubmit}
+        result={result ? <EnhancementResults result={result} /> : null}
       >
         {inputContent}
       </DashboardLayout>
