@@ -1,11 +1,12 @@
 import { ResumeData } from "@/types/resume";
 import { EditableList } from "../editableList";
+import { SectionHeader } from "./section-header";
 
 interface SkillsProps {
-  skills: ResumeData["enhancedContent"]["skills"];
+  skills: ResumeData["skills"];
   isEditing: boolean;
   onUpdateSkills: (
-    category: keyof ResumeData["enhancedContent"]["skills"],
+    category: keyof ResumeData["skills"],
     skills: string[]
   ) => void;
 }
@@ -14,43 +15,37 @@ export const Skills: React.FC<SkillsProps> = ({
   skills,
   isEditing,
   onUpdateSkills,
-}) => {
-  const skillCategories = [
-    { key: "technical" as const, label: "Technical Skills" },
-    { key: "domain" as const, label: "Domain Expertise" },
-    { key: "leadership" as const, label: "Leadership Skills" },
-  ];
-
-  return (
-    <section>
-      <h2 className="text-xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
-        SKILLS
-      </h2>
-      <div className="space-y-4">
-        {skillCategories.map(({ key, label }) => (
-          <div key={key}>
-            <h3 className="font-semibold mb-2">{label}</h3>
-            {isEditing ? (
-              <EditableList
-                items={skills[key]}
-                onChange={(newSkills) => onUpdateSkills(key, newSkills)}
-                isEditing={true}
-              />
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {skills[key].map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-gray-100 rounded-md text-sm text-gray-700"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
+}) => (
+  <section>
+    <SectionHeader>SKILLS</SectionHeader>
+    <div className="flex flex-col gap-4">
+      {Object.entries(skills).map(([category, skillList]) => (
+        <div key={category}>
+          <h3 className="font-semibold text-gray-800 mb-2">
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </h3>
+          {isEditing ? (
+            <EditableList
+              items={skillList}
+              onChange={(newSkills) =>
+                onUpdateSkills(category as keyof typeof skills, newSkills)
+              }
+              isEditing={true}
+            />
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {skillList.map((skill, index) => (
+                <span
+                  key={index}
+                  className="text-gray-700 border-b border-gray-300 mr-4"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+);

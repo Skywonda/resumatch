@@ -21,12 +21,9 @@ export function useResumeData(initialData: ResumeData) {
   const updateProfessionalSummary = (content: string) => {
     setResumeData((prev) => ({
       ...prev,
-      enhancedContent: {
-        ...prev.enhancedContent,
-        professionalSummary: {
-          ...prev.enhancedContent.professionalSummary,
-          content,
-        },
+      professionalSummary: {
+        ...prev.professionalSummary,
+        content,
       },
     }));
   };
@@ -34,64 +31,50 @@ export function useResumeData(initialData: ResumeData) {
   const updateProfessionalHighlights = (highlights: string[]) => {
     setResumeData((prev) => ({
       ...prev,
-      enhancedContent: {
-        ...prev.enhancedContent,
-        professionalSummary: {
-          ...prev.enhancedContent.professionalSummary,
-          highlights,
-        },
+      professionalSummary: {
+        ...prev.professionalSummary,
+        highlights,
       },
     }));
   };
 
   const updateExperiencePosition = (
     index: number,
-    updates: Partial<
-      ResumeData["enhancedContent"]["experience"]["positions"][0]
-    >
+    updates: Partial<ResumeData["experience"]["positions"][0]>
   ) => {
     setResumeData((prev) => {
-      const newPositions = [...prev.enhancedContent.experience.positions];
+      const newPositions = [...prev.experience.positions];
       newPositions[index] = { ...newPositions[index], ...updates };
       return {
         ...prev,
-        enhancedContent: {
-          ...prev.enhancedContent,
-          experience: { positions: newPositions },
-        },
+        experience: { positions: newPositions },
       };
     });
   };
 
   const updateEducationEntry = (
     index: number,
-    updates: Partial<ResumeData["enhancedContent"]["education"]["entries"][0]>
+    updates: Partial<ResumeData["education"]["entries"][0]>
   ) => {
     setResumeData((prev) => {
-      const newEntries = [...prev.enhancedContent.education.entries];
+      const newEntries = [...prev.education.entries];
       newEntries[index] = { ...newEntries[index], ...updates };
       return {
         ...prev,
-        enhancedContent: {
-          ...prev.enhancedContent,
-          education: { entries: newEntries },
-        },
+        education: { entries: newEntries },
       };
     });
   };
 
   const updateSkills = (
-    category: keyof ResumeData["enhancedContent"]["skills"],
+    category: keyof ResumeData["skills"],
     skills: string[]
   ) => {
     setResumeData((prev) => ({
       ...prev,
-      enhancedContent: {
-        ...prev.enhancedContent,
-        skills: {
-          ...prev.enhancedContent.skills,
-          [category]: skills,
-        },
+      skills: {
+        ...prev.skills,
+        [category]: skills,
       },
     }));
   };

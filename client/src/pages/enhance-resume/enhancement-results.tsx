@@ -11,41 +11,10 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ResumeTemplate } from "@/components/resume-template";
+import { ResumeData } from "@/types/resume";
 
 interface ResumeEnhancementResult {
-  enhancedContent: {
-    professionalSummary: {
-      content: string;
-      highlights: string[];
-    };
-    experience: {
-      positions: {
-        role: string;
-        company: string;
-        duration: string;
-        achievements: string[];
-        impactMetrics: string[];
-      }[];
-    };
-    skills: {
-      technical: string[];
-      domain: string[];
-      leadership: string[];
-    };
-    education: {
-      entries: {
-        degree: string;
-        institution: string;
-        year: string | null;
-        highlights: string[];
-      }[];
-    };
-  };
-  optimization: {
-    keyStrengths: string[];
-    impactMetrics: string[];
-    uniqueValue: string[];
-  };
+  enhancedContent: ResumeData;
   suggestedSkills?: {
     technical?: string[];
     domain?: string[];
@@ -137,7 +106,7 @@ export function EnhancementResults({ result }: EnhancementResultsProps) {
 
       {/* Resume Tab */}
       <TabsContent value="resume" className="mt-4">
-        <ResumeTemplate initialData={result} />
+        <ResumeTemplate initialData={result.enhancedContent} />
       </TabsContent>
 
       {/* Suggested Skills Tab */}

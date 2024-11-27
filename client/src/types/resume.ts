@@ -11,33 +11,31 @@ export interface ResumeHeader {
 
 export interface ResumeData {
   header: ResumeHeader;
-  enhancedContent: {
-    professionalSummary: {
-      content: string;
+  professionalSummary: {
+    content: string;
+    highlights: string[];
+  };
+  experience: {
+    positions: {
+      role: string;
+      company: string;
+      duration: string;
+      achievements: string[];
+      impactMetrics: string[];
+    }[];
+  };
+  skills: {
+    technical: string[];
+    domain: string[];
+    leadership: string[];
+  };
+  education: {
+    entries: {
+      degree: string;
+      institution: string;
+      year: string | null;
       highlights: string[];
-    };
-    experience: {
-      positions: {
-        role: string;
-        company: string;
-        duration: string;
-        achievements: string[];
-        impactMetrics: string[];
-      }[];
-    };
-    skills: {
-      technical: string[];
-      domain: string[];
-      leadership: string[];
-    };
-    education: {
-      entries: {
-        degree: string;
-        institution: string;
-        year: string | null;
-        highlights: string[];
-      }[];
-    };
+    }[];
   };
   optimization?: {
     keyStrengths: string[];

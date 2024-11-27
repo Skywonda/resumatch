@@ -32,17 +32,17 @@ export const resumeEnhancement = async (resume: string, level: string) => {
 
 export const resumeTailoring = async (
   jobDescription: string,
-  resume: string
+  resumeText: string
 ) => {
   const { data } = await ApiService.post<{
     data: string;
     rating: string | null;
-  }>("/resume-ranker/resume-tailoring", {
-    resume,
+  }>("/tailor", {
+    resumeText,
     jobDescription,
   });
 
-  return { text: data.data, rating: data.rating };
+  return { data: data, rating: data.rating };
 };
 
 export const generateCoverLetter = async (

@@ -4,11 +4,11 @@ import { EditableText } from "../editableText";
 import { ResumeData } from "@/types/resume";
 
 interface EducationProps {
-  entries: ResumeData["enhancedContent"]["education"]["entries"];
+  entries: ResumeData["education"]["entries"];
   isEditing: boolean;
   onUpdateEntry: (
     index: number,
-    updates: Partial<ResumeData["enhancedContent"]["education"]["entries"][0]>
+    updates: Partial<ResumeData["education"]["entries"][0]>
   ) => void;
 }
 

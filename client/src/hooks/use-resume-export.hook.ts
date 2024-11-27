@@ -1,4 +1,3 @@
-// hooks/useResumeExport.ts
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import type { ResumeData } from "@/types/resume";
@@ -9,76 +8,67 @@ export function useResumeExport() {
   const exportToPdf = async () => {
     try {
       const resumeElement = document.getElementById("resume-content");
-      if (!resumeElement) {
-        throw new Error(
-          "Resume content not found. Please ensure the resume is properly loaded."
-        );
-      }
-
-      // Wait for any potential images to load
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!resumeElement) throw new Error("Resume content not found");
 
       const canvas = await html2canvas(resumeElement, {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
-        windowWidth: resumeElement.scrollWidth,
-        windowHeight: resumeElement.scrollHeight,
+        imageTimeout: 0,
+        removeContainer: true,
         onclone: (doc) => {
-          // Ensure the cloned element is visible and has dimensions
-          const clonedResume = doc.getElementById("resume-content");
-          if (clonedResume) {
-            clonedResume.style.visibility = "visible";
-            clonedResume.style.width = `${resumeElement.scrollWidth}px`;
-            clonedResume.style.height = `${resumeElement.scrollHeight}px`;
+          const clone = doc.getElementById("resume-content");
+          if (clone) {
+            clone.setAttribute(
+              "style",
+              `${clone.getAttribute("style") || ""}
+              transition: none !important;
+              animation: none !important;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;`
+            );
           }
         },
       });
 
-      const imgData = canvas.toDataURL("image/png");
-
-      // A4 dimensions in pts (72 per inch)
-      const pdfWidth = 595.28;
-      const pdfHeight = 841.89;
+      const imgData = canvas.toDataURL("image/jpeg", 0.85);
 
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "pt",
         format: "a4",
+        compress: true,
       });
 
-      // Calculate scaling to fit A4
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const scaledWidth = imgWidth * ratio;
-      const scaledHeight = imgHeight * ratio;
-      const xOffset = (pdfWidth - scaledWidth) / 2;
-      const yOffset = (pdfHeight - scaledHeight) / 2;
+      const pdfWidth = 595.28;
+      const pdfHeight = 841.89;
+      const ratio = Math.min(
+        (pdfWidth - 40) / canvas.width,
+        (pdfHeight - 40) / canvas.height
+      );
 
-      pdf.addImage(imgData, "PNG", xOffset, yOffset, scaledWidth, scaledHeight);
-      pdf.save("resume.pdf");
+      const scaledWidth = canvas.width * ratio;
+      const scaledHeight = canvas.height * ratio;
+      const x = (pdfWidth - scaledWidth) / 2;
+      const y = (pdfHeight - scaledHeight) / 2;
+
+      pdf.addImage(imgData, "JPEG", x, y, scaledWidth, scaledHeight);
+
+      // Create and download blob directly without datauristring
+      const pdfBlob = new Blob([pdf.output("blob")], {
+        type: "application/pdf",
+      });
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "resume.pdf";
+      link.click();
+
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("PDF export failed:", error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : "Failed to export PDF. Please try again."
-      );
-    }
-  };
-
-  const exportToDocx = async (data: ResumeData) => {
-    try {
-      // ... DOCX export code remains the same ...
-    } catch (error) {
-      console.error("DOCX export failed:", error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : "Failed to export DOCX. Please try again."
-      );
+      throw error instanceof Error ? error : new Error("PDF export failed");
     }
   };
 
@@ -86,16 +76,7 @@ export function useResumeExport() {
     data: ResumeData,
     format: ExportFormat = "pdf"
   ) => {
-    try {
-      if (format === "pdf") {
-        await exportToPdf();
-      } else {
-        await exportToDocx(data);
-      }
-    } catch (error) {
-      console.error("Export failed:", error);
-      throw error;
-    }
+    return format === "pdf" ? exportToPdf() : exportToPdf();
   };
 
   return { exportResume };

@@ -2,11 +2,14 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ResumeEnhancementService } from './services/enhance-resume.service';
 import { EnhanceResumeDto } from './dto/enhance-resume.dto';
+import { TailorResumeDto } from './dto/tailor-resume.dto';
+import { ResumeTailoringService } from './services/tailor-resume.service';
 
 @Controller('api')
 export class MainController {
   constructor(
     private readonly resumeEnhancementService: ResumeEnhancementService,
+    private readonly resumeTailoringService: ResumeTailoringService,
   ) {}
 
   @Post('resume/enhance')
@@ -23,8 +26,11 @@ export class MainController {
   }
 
   @Post('resume/tailor')
-  tailorResume(@Body() dto: EnhanceResumeDto) {
-    return { status: 501, message: 'Not Implemented' };
+  async tailorResume(@Body() dto: TailorResumeDto) {
+    return await this.resumeTailoringService.tailorResume(
+      dto.resumeText,
+      dto.jobDescription,
+    );
   }
 
   @Post('resume/roast')

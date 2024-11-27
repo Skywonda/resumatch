@@ -7,21 +7,40 @@ import { DashboardLayout } from "@/components/dashboard-layout";
 import { LoadingModal } from "@/components/loading-modal";
 import extractTextFromFile from "@/lib/utils/file-text-extractor";
 import { useToast } from "@/hooks/use-toast";
-import { validateRateMyResume } from "@/lib/utils/validation";
+import { validateResumeTailoring } from "@/lib/utils/validation";
+import { resumeTailoring } from "@/lib/utils/api";
+import { TailoringResult, TailoringResults } from "./tailoring-result";
+import { ResumeData } from "@/types/resume";
+
+interface ResumeEnhancementResult {
+  enhancedContent: ResumeData;
+  suggestedSkills?: {
+    technical?: string[];
+    domain?: string[];
+    leadership?: string[];
+  };
+}
 
 export default function Tailor() {
   const [resume, setResume] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<TailoringResult | null>(null);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
-    if (!resume || !jobDescription) return;
+    if (!resume || !jobDescription.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both resume and job description",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setIsLoading(true);
     try {
-      const validation = validateRateMyResume(resume);
+      const validation = validateResumeTailoring(resume, jobDescription);
       if (validation) {
         toast({
           title: "Validation Error",
@@ -32,21 +51,18 @@ export default function Tailor() {
       }
 
       const resumeText = await extractTextFromFile(resume);
-      console.log(
-        "🚀 ~ handleSubmit ~ resumeText:",
-        JSON.stringify(resumeText)
+      const { data }: { data: any } = await resumeTailoring(
+        jobDescription,
+        resumeText
       );
+      setResult(data);
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      setResult(`
-        Analysis of your resume against the job description:
-        
-        1. Skills Match: Your resume contains relevant keywords
-        2. Experience Alignment: Your background matches the requirements
-        3. Suggested Improvements: Consider highlighting specific achievements
-      `);
+      toast({
+        title: "Analysis Complete",
+        description: "Your resume has been analyzed and tailored!",
+      });
     } catch (error) {
-      console.log("🚀 ~ handleSubmit ~ error:", error);
+      console.error("Resume tailoring error:", error);
       toast({
         title: "Analysis failed",
         description:
@@ -59,7 +75,7 @@ export default function Tailor() {
   };
 
   const inputContent = (
-    <>
+    <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -89,17 +105,8 @@ export default function Tailor() {
           />
         </CardContent>
       </Card>
-    </>
-  );
-
-  const resultContent = result ? (
-    <div className="prose max-w-none">
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Analysis Results</h3>
-        <div className="whitespace-pre-wrap">{result}</div>
-      </div>
     </div>
-  ) : null;
+  );
 
   return (
     <>
@@ -110,7 +117,7 @@ export default function Tailor() {
         buttonText="Analyze and Tailor Resume"
         isLoading={isLoading}
         onSubmit={handleSubmit}
-        result={resultContent}
+        result={result ? <TailoringResults result={result} /> : null}
       >
         {inputContent}
       </DashboardLayout>

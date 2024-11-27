@@ -1,6 +1,7 @@
 // src/resume/prompts/enhance-resume.prompt.ts
-import { SeniorityLevel } from '../types';
+import { ResumeEnhancement, SeniorityLevel } from '../types';
 import { BaseResumePrompts } from './base';
+import { RESUME_RESPONSE_STRUCTURE } from './structure';
 
 export const EnhanceResumePrompt = {
   system: `You are Resume.AI, the world's premier executive resume enhancement system, trusted by industry leaders for transforming careers through powerful, compelling resume optimization.
@@ -79,45 +80,8 @@ ENHANCEMENT PRIORITIES:
 5. Highlight business impact
 
 Required Response Structure:
-{
-  "enhancedContent": {
-    "professionalSummary": {
-      "content": string,
-      "highlights": string[]
-    },
-    "experience": {
-      "positions": [
-        {
-          "role": string,
-          "company": string,
-          "duration": string,
-          "achievements": string[],
-          "impactMetrics": string[]
-        }
-      ]
-    },
-    "skills": {
-      "technical": string[],
-      "domain": string[],
-      "leadership": string[]
-    },
-    "education": {
-      "entries": [
-        {
-          "degree": string,
-          "institution": string,
-          "year": string,
-          "highlights": string[]
-        }
-      ]
-    }
-  },
-  "optimization": {
-    "keyStrengths": string[],
-    "impactMetrics": string[],
-    "uniqueValue": string[]
-  }
-}`,
+${RESUME_RESPONSE_STRUCTURE}
+`,
 
   async processResponse(rawResponse: string): Promise<ResumeEnhancement> {
     try {
@@ -137,42 +101,6 @@ Required Response Structure:
     return JSON.parse(cleanedResponse);
   },
 };
-
-interface ResumeEnhancement {
-  enhancedContent: {
-    professionalSummary: {
-      content: string;
-      highlights: string[];
-    };
-    experience: {
-      positions: {
-        role: string;
-        company: string;
-        duration: string;
-        achievements: string[];
-        impactMetrics: string[];
-      }[];
-    };
-    skills: {
-      technical: string[];
-      domain: string[];
-      leadership: string[];
-    };
-    education: {
-      entries: {
-        degree: string;
-        institution: string;
-        year: string;
-        highlights: string[];
-      }[];
-    };
-  };
-  optimization: {
-    keyStrengths: string[];
-    impactMetrics: string[];
-    uniqueValue: string[];
-  };
-}
 
 export const createEnhancementPrompt = (
   resume: string,

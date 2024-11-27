@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AIService } from 'src/common/services/ai.service';
 import { ResumeEnhancementService } from './services/enhance-resume.service';
 import { MainController } from './main.controller';
+import { ResumeTailoringService } from './services/tailor-resume.service';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { MainController } from './main.controller';
     ]),
   ],
   controllers: [MainController],
-  providers: [AIService, ResumeEnhancementService],
+  providers: [AIService, ResumeEnhancementService, ResumeTailoringService],
 })
 export class MainModule {}

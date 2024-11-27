@@ -11,36 +11,10 @@ import { EnhancementResults } from "./enhancement-results";
 import { validateResumeAnalysis } from "@/lib/utils/validation";
 import extractTextFromFile from "@/lib/utils/file-text-extractor";
 import { resumeEnhancement } from "@/lib/utils/api";
+import { ResumeData } from "@/types/resume";
 
 interface EnhancementResult {
-  enhancedContent: {
-    professionalSummary: {
-      content: string;
-      highlights: string[];
-    };
-    experience: {
-      positions: {
-        role: string;
-        company: string;
-        duration: string;
-        achievements: string[];
-        impactMetrics: string[];
-      }[];
-    };
-    skills: {
-      technical: string[];
-      domain: string[];
-      leadership: string[];
-    };
-    education: {
-      entries: {
-        degree: string;
-        institution: string;
-        year: string | null;
-        highlights: string[];
-      }[];
-    };
-  };
+  enhancedContent: ResumeData;
   optimization: {
     keyStrengths: string[];
     impactMetrics: string[];

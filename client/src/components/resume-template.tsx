@@ -128,23 +128,21 @@ export const ResumeTemplate: React.FC<{ initialData: ResumeData }> = ({
           {/* Left Column */}
           <div className="space-y-6">
             <ProfessionalSummary
-              content={resumeData.enhancedContent.professionalSummary.content}
-              highlights={
-                resumeData.enhancedContent.professionalSummary.highlights
-              }
+              content={resumeData.professionalSummary.content}
+              highlights={resumeData.professionalSummary.highlights}
               isEditing={isEditing}
               onUpdateContent={updateProfessionalSummary}
               onUpdateHighlights={updateProfessionalHighlights}
             />
 
             <Experience
-              positions={resumeData.enhancedContent.experience.positions}
+              positions={resumeData.experience.positions}
               isEditing={isEditing}
               onUpdatePosition={updateExperiencePosition}
             />
 
             <Education
-              entries={resumeData.enhancedContent.education.entries}
+              entries={resumeData.education.entries}
               isEditing={isEditing}
               onUpdateEntry={updateEducationEntry}
             />
@@ -153,7 +151,7 @@ export const ResumeTemplate: React.FC<{ initialData: ResumeData }> = ({
           {/* Right Column */}
           <div className="space-y-6">
             <Skills
-              skills={resumeData.enhancedContent.skills}
+              skills={resumeData.skills}
               isEditing={isEditing}
               onUpdateSkills={updateSkills}
             />
