@@ -8,8 +8,10 @@ export const FILE_TYPES = {
 } as const;
 
 // eslint-disable-next-line import/no-anonymous-default-export
+
+const baseURL = import.meta.env.VITE_API_URL;
 const ApiService = axios.create({
-  baseURL: "http://localhost:8000/api/resume",
+  baseURL: `${baseURL}/api/resume` || "http://localhost:8000/api/resume",
   // timeout: 30000,
 });
 
