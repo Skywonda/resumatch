@@ -5,6 +5,7 @@ import { AIService } from 'src/common/services/ai.service';
 import { ResumeEnhancementService } from './services/enhance-resume.service';
 import { MainController } from './main.controller';
 import { ResumeTailoringService } from './services/tailor-resume.service';
+import { ResumeRatingService } from './services/rate-resume.service';
 
 @Module({
   imports: [
@@ -21,6 +22,11 @@ import { ResumeTailoringService } from './services/tailor-resume.service';
     ]),
   ],
   controllers: [MainController],
-  providers: [AIService, ResumeEnhancementService, ResumeTailoringService],
+  providers: [
+    AIService,
+    ResumeEnhancementService,
+    ResumeTailoringService,
+    ResumeRatingService,
+  ],
 })
 export class MainModule {}

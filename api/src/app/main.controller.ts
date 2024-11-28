@@ -4,12 +4,15 @@ import { ResumeEnhancementService } from './services/enhance-resume.service';
 import { EnhanceResumeDto } from './dto/enhance-resume.dto';
 import { TailorResumeDto } from './dto/tailor-resume.dto';
 import { ResumeTailoringService } from './services/tailor-resume.service';
+import { ResumeRatingService } from './services/rate-resume.service';
+import { RateResumeDto } from './dto/rate-resume.dto';
 
 @Controller('api')
 export class MainController {
   constructor(
     private readonly resumeEnhancementService: ResumeEnhancementService,
     private readonly resumeTailoringService: ResumeTailoringService,
+    private readonly resumeRatingService: ResumeRatingService,
   ) {}
 
   @Post('resume/enhance')
@@ -21,8 +24,8 @@ export class MainController {
   }
 
   @Post('resume/rate')
-  rateResume(@Body() dto: EnhanceResumeDto) {
-    return { status: 501, message: 'Not Implemented' };
+  async rateResume(@Body() dto: RateResumeDto) {
+    return await this.resumeRatingService.rateResume(dto.resumeText);
   }
 
   @Post('resume/tailor')
