@@ -8,6 +8,7 @@ import { RootLayout } from "@/layouts/RootLayout";
 import Dashboard from "@/pages/dashboard";
 import Tailor from "@/pages/tailor-resume";
 import Enhance from "@/pages/enhance-resume";
+import Rating from "@/pages/rate-resume";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ export const router = createBrowserRouter(
         <Route index element={<Dashboard />} />
         <Route path="tailor-resume" element={<Tailor />} />
         <Route path="enhance-resume" element={<Enhance />} />
+        <Route path="rate-resume" element={<Rating />} />
       </Route>
     </Route>
   )

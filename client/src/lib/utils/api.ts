@@ -47,6 +47,14 @@ export const resumeTailoring = async (
   return { data: data, rating: data.rating };
 };
 
+export const rateMyResume = async (resume: string) => {
+  const { data } = await ApiService.post<{ data: string }>("/rate", {
+    resumeText: resume,
+  });
+
+  return { data: data };
+};
+
 export const generateCoverLetter = async (
   jobDescription: string,
   resume: string,
@@ -79,18 +87,6 @@ export const generateJobApplicationQuestionAnswer = async (
   return data.data;
 };
 
-export const rateMyResume = async (resume: string, jobDescription?: string) => {
-  const { data } = await ApiService.post<{ data: string }>(
-    "/resume-ranker/rate-resume",
-    {
-      resume,
-      jobDescription,
-    }
-  );
-
-  return data.data;
-};
-
 export const roastMyResume = async (
   resume: string,
   jobDescription?: string
@@ -103,7 +99,7 @@ export const roastMyResume = async (
     }
   );
 
-  return data.data;
+  return { data: data };
 };
 
 export const generateResumeFile = async ({

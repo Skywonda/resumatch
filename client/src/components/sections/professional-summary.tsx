@@ -27,14 +27,14 @@ export const ProfessionalSummary: React.FC<ProfessionalSummaryProps> = ({
         isEditing={isEditing}
         multiline
       />
-      <div>
+      {/* <div>
         <h3 className="font-semibold mt-3 mb-2">Key Highlights</h3>
         <EditableList
           items={highlights}
           onChange={onUpdateHighlights}
           isEditing={isEditing}
         />
-      </div>
+      </div> */}
     </div>
   </section>
 );

@@ -40,6 +40,12 @@ const Content = {
     description: "Making you look good on paper (the rest is up to you) 😉",
     emoji: "🏗️",
   },
+  resumeRating: {
+    title: "Rating Your Resume...",
+    description:
+      "Scoring your resume based on how well you follow the rules 📚",
+    emoji: "📊",
+  },
 } as const;
 
 interface LoadingModalProps {

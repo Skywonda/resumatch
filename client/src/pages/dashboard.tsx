@@ -1,28 +1,61 @@
-import { FileText, Stars, Clock, ArrowRight } from "lucide-react";
+import {
+  FileText,
+  Stars,
+  Clock,
+  ArrowRight,
+  Target,
+  Flame,
+  FileEdit,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FeatureCard } from "@/components/feature-card";
 import { useNavigate } from "react-router-dom";
 
 const features = [
   {
-    title: "Resume Optimization",
-    description: "Get instant optimized resume suggestions, and download it",
+    title: "Enhance Resume",
+    description:
+      "Get instant feedback and optimization suggestions to strengthen your resume",
     icon: Clock,
     route: "enhance-resume",
     status: "available" as const,
   },
   {
-    title: "Resume Tailoring",
-    description: "Tailor your resume to match your job description",
-    icon: FileText,
+    title: "Tailor Resume",
+    description: "Match your resume perfectly to specific job descriptions",
+    icon: Target,
     route: "tailor-resume",
     status: "available" as const,
   },
   {
-    title: "AI ",
-    description: "Get AI-powered suggestions to enhance your resume",
+    title: "Rate Resume",
+    description:
+      "Get a detailed score and analysis of your resume's effectiveness",
     icon: Stars,
-    route: "optimize",
+    route: "rate-resume",
+    status: "available" as const,
+  },
+  {
+    title: "Roast Resume",
+    description:
+      "Get brutally honest feedback to identify critical improvements",
+    icon: Flame,
+    route: "roast-resume",
+    status: "available" as const,
+  },
+  {
+    title: "Cover Letter Generator",
+    description:
+      "Create compelling, customized cover letters that complement your resume",
+    icon: FileEdit,
+    route: "cover-letter",
+    status: "available" as const,
+  },
+  {
+    title: "AI Resume Review",
+    description: "Get comprehensive AI-powered analysis and suggestions",
+    icon: FileText,
+    route: "ai-review",
     status: "coming_soon" as const,
   },
 ];

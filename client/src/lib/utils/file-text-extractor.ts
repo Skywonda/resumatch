@@ -75,6 +75,7 @@ export const extractTextFromPDF = (file: File): Promise<string> => {
           );
         }
 
+        console.log("🚀 ~ reader.onload= ~ extractedText:", extractedText);
         resolve(extractedText + url);
       } catch (error) {
         reject(error);
