@@ -86,6 +86,7 @@ export class AIService {
 
       return response;
     } catch (error) {
+      console.log('🚀 ~ AIService ~ generateWithGemini ~ error:', error);
       this.logger.error(`Gemini request failed: ${error.message}`);
       throw error;
     }

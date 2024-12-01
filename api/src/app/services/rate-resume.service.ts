@@ -9,7 +9,7 @@ export class ResumeRatingService {
 
   constructor(private readonly aiService: AIService) {}
 
-  async rateResume(resumeText: string): Promise<ResumeRating> {
+  async rateResume(resumeText: string): Promise<any> {
     try {
       const cleanedResumeText = this.preprocessResume(resumeText);
       const { systemPrompt, userPrompt, processResponse } =
@@ -21,7 +21,6 @@ export class ResumeRatingService {
       );
 
       const processedResponse = await processResponse(ratingContent);
-      this.validateRatingScores(processedResponse);
 
       return processedResponse;
     } catch (error) {
@@ -37,20 +36,6 @@ export class ResumeRatingService {
 
       throw new Error('Unable to rate resume. Please try again.');
     }
-  }
-
-  private validateRatingScores(rating: ResumeRating) {
-    const validRange = (score: number) => score >= 1 && score <= 10;
-
-    if (!validRange(rating.overallScore)) {
-      throw new Error('Invalid overall score range');
-    }
-
-    Object.values(rating.categoryScores).forEach((category) => {
-      if (!validRange(category.score)) {
-        throw new Error('Invalid category score range');
-      }
-    });
   }
 
   private preprocessResume(resumeText: string): string {
