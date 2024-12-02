@@ -57,19 +57,16 @@ export const rateMyResume = async (resume: string) => {
 
 export const generateCoverLetter = async (
   jobDescription: string,
-  resume: string,
-  length: string
+  resumeText: string,
+  companyName: string
 ) => {
-  const { data } = await ApiService.post<{ data: string }>(
-    "/resume-ranker/generate-cover-letter",
-    {
-      resume,
-      length,
-      jobDescription,
-    }
-  );
+  const { data } = await ApiService.post<{ data: string }>("/cover-letter", {
+    resumeText,
+    companyName,
+    jobDescription,
+  });
 
-  return data.data;
+  return { data: data };
 };
 
 export const generateJobApplicationQuestionAnswer = async (

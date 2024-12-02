@@ -6,6 +6,10 @@ import { TailorResumeDto } from './dto/tailor-resume.dto';
 import { ResumeTailoringService } from './services/tailor-resume.service';
 import { ResumeRatingService } from './services/rate-resume.service';
 import { RateResumeDto } from './dto/rate-resume.dto';
+import { ResumeRoastService } from './services/roast-resume.service';
+import { RoastResumeDto } from './dto/roast-resume.dto';
+import { CoverLetterService } from './services/cover-letter.service';
+import { CoverLetterDto } from './dto/cover-letter.dto';
 
 @Controller('api')
 export class MainController {
@@ -13,6 +17,8 @@ export class MainController {
     private readonly resumeEnhancementService: ResumeEnhancementService,
     private readonly resumeTailoringService: ResumeTailoringService,
     private readonly resumeRatingService: ResumeRatingService,
+    private readonly resumeRoastService: ResumeRoastService,
+    private readonly coverLetterService: CoverLetterService,
   ) {}
 
   @Post('resume/enhance')
@@ -37,12 +43,12 @@ export class MainController {
   }
 
   @Post('resume/roast')
-  roastResume(@Body() dto: EnhanceResumeDto) {
-    return { status: 501, message: 'Not Implemented' };
+  async roastResume(@Body() dto: RoastResumeDto) {
+    return await this.resumeRoastService.roastResume(dto.resumeText);
   }
 
   @Post('resume/cover-letter')
-  generateCoverLetter(@Body() dto: EnhanceResumeDto) {
-    return { status: 501, message: 'Not Implemented' };
+  generateCoverLetter(@Body() dto: CoverLetterDto) {
+    return this.coverLetterService.generateCoverLetter(dto);
   }
 }

@@ -6,6 +6,8 @@ import { ResumeEnhancementService } from './services/enhance-resume.service';
 import { MainController } from './main.controller';
 import { ResumeTailoringService } from './services/tailor-resume.service';
 import { ResumeRatingService } from './services/rate-resume.service';
+import { ResumeRoastService } from './services/roast-resume.service';
+import { CoverLetterService } from './services/cover-letter.service';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { ResumeRatingService } from './services/rate-resume.service';
     ResumeEnhancementService,
     ResumeTailoringService,
     ResumeRatingService,
+    ResumeRoastService,
+    CoverLetterService,
   ],
 })
 export class MainModule {}

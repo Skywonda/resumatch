@@ -119,7 +119,7 @@ export const ResumeTemplate: React.FC<{ initialData: ResumeData }> = ({
       >
         <HeaderSection
           isEditing={isEditing}
-          data={headerSectionData}
+          data={resumeData.header}
           onUpdate={updateHeader}
         />
 

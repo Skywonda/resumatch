@@ -27,15 +27,15 @@ const navigationItems: NavigationItem[] = [
     icon: Stars,
   },
   {
-    path: "/dashboard/roast-resume",
-    label: "Resume Roast",
-    icon: Flame,
-    disabled: true,
-  },
-  {
     path: "/dashboard/cover-letter",
     label: "Cover Letter",
     icon: FileEdit,
+    disabled: false,
+  },
+  {
+    path: "/dashboard/roast-resume",
+    label: "Resume Roast",
+    icon: Flame,
     disabled: true,
   },
   {

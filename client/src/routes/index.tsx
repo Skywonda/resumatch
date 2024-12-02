@@ -9,6 +9,7 @@ import Dashboard from "@/pages/dashboard";
 import Tailor from "@/pages/tailor-resume";
 import Enhance from "@/pages/enhance-resume";
 import Rating from "@/pages/rate-resume";
+import CoverLetter from "@/pages/cover-letter";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ export const router = createBrowserRouter(
         <Route path="tailor-resume" element={<Tailor />} />
         <Route path="enhance-resume" element={<Enhance />} />
         <Route path="rate-resume" element={<Rating />} />
+        <Route path="cover-letter" element={<CoverLetter />} />
       </Route>
     </Route>
   )
