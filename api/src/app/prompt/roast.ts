@@ -52,6 +52,7 @@ RESPONSE STRUCTURE:
   "overallRoast": {
     "openingRoast": string,
     "generalThoughts": string[]
+    "brutalScore": number
   },
   "sectionRoasts": {
     "format": {

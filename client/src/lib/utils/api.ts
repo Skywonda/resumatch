@@ -84,17 +84,10 @@ export const generateJobApplicationQuestionAnswer = async (
   return data.data;
 };
 
-export const roastMyResume = async (
-  resume: string,
-  jobDescription?: string
-) => {
-  const { data } = await ApiService.post<{ data: string }>(
-    "/resume-ranker/roast-resume",
-    {
-      resume,
-      jobDescription,
-    }
-  );
+export const roastMyResume = async (resume: string) => {
+  const { data } = await ApiService.post<{ data: string }>("roast", {
+    resumeText: resume,
+  });
 
   return { data: data };
 };

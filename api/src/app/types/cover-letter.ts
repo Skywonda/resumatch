@@ -6,6 +6,7 @@ export interface CoverLetterMetadata {
   tone: string;
   focusPoints: string[];
   keywordsUsed: string[];
+  compatibilityScore: number;
 }
 
 export interface CoverLetterCustomization {

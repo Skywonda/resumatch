@@ -46,6 +46,11 @@ const Content = {
       "Scoring your resume based on how well you follow the rules 📚",
     emoji: "📊",
   },
+  resumeRoast: {
+    title: "Preparing Your Roast...",
+    description: "Gathering brutal honesty and uncomfortable truths 🔥",
+    emoji: "🔥",
+  },
 } as const;
 
 interface LoadingModalProps {

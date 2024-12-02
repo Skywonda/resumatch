@@ -10,6 +10,7 @@ import Tailor from "@/pages/tailor-resume";
 import Enhance from "@/pages/enhance-resume";
 import Rating from "@/pages/rate-resume";
 import CoverLetter from "@/pages/cover-letter";
+import Roast from "@/pages/roast-resume";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,8 @@ export const router = createBrowserRouter(
         <Route path="enhance-resume" element={<Enhance />} />
         <Route path="rate-resume" element={<Rating />} />
         <Route path="cover-letter" element={<CoverLetter />} />
+        <Route path="roast-resume" element={<Roast />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Route>
   )

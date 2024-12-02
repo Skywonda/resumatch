@@ -17,6 +17,6 @@ export class CoverLetterDto {
   @MinLength(50, {
     message: 'Job description must be at least 50 characters long',
   })
-  @MaxLength(3000, { message: 'Job description cannot exceed 3000 characters' })
+  @MaxLength(5000, { message: 'Job description cannot exceed 3000 characters' })
   jobDescription: string;
 }

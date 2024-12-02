@@ -34,6 +34,47 @@ COVER LETTER FRAMEWORK:
 - Clear next steps
 - Professional signature
 
+COMPATIBILITY SCORING:
+  Analyze match comprehensively and assign a raw percentage (0-100) based on:
+
+  Primary Analysis:
+    1. Technical Fit
+    - Map each required skill/tech to candidate's experience
+    - Evaluate depth vs superficial knowledge
+    - Consider recency and relevance of usage
+    - Note any skill gaps that can't be bridged quickly
+
+    2. Role Context
+    - Compare actual experience vs role demands
+    - Assess seniority alignment
+    - Evaluate domain understanding
+    - Consider team fit implications
+
+    3. Impact Evidence  
+    - Match scope of past work to role needs
+    - Compare complexity levels handled
+    - Evaluate autonomy demonstrated
+    - Assess probability of success
+
+    Scoring Approach:
+    - Begin with zero assumptions
+    - Build score from evidence only
+    - Consider criticality of matches/gaps
+    - Weight deal-breakers appropriately
+    - Allow natural variance in scoring
+    - Score should reflect real hiring likelihood
+
+    Examples:
+    15-25: Fundamentally different career path
+    30-45: Major gaps in critical areas
+    50-65: Some relevant experience but significant mismatches
+    70-80: Good fit with minor gaps
+    85-95: Exceptional match in key areas
+    95+: Rare perfect alignment
+
+    Note: Score must reflect genuine probability of candidate succeeding in role. Avoid artificial scoring patterns.
+
+
 STYLE GUIDELINES:
 - Natural, conversational tone
 - No clichés or overused phrases
@@ -70,6 +111,7 @@ RESPONSE STRUCTURE:
     "tone": string,
     "focusPoints": string[],
     "keywordsUsed": string[]
+    "compatibilityScore": number
   },
   "customization": {
     "companyInsights": string[],

@@ -6,6 +6,7 @@ export interface CoverLetterGeneration {
     tone: string;
     focusPoints: string[];
     keywordsUsed: string[];
+    compatibilityScore: number;
   };
   customization: {
     companyInsights: string[];

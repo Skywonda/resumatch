@@ -6,6 +6,7 @@ export const FeatureKeys = {
   resumeBuilder: "resumeBuilder",
   downloading: "downloading",
   resumeRating: "resumeRating",
+  resumeRoast: "resumeRoast",
 } as const;
 
 export type FeatureKey = keyof typeof FeatureKeys;

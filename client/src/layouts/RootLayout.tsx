@@ -36,7 +36,7 @@ const navigationItems: NavigationItem[] = [
     path: "/dashboard/roast-resume",
     label: "Resume Roast",
     icon: Flame,
-    disabled: true,
+    disabled: false,
   },
   {
     path: "/dashboard/ai-review",
