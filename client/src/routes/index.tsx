@@ -11,12 +11,14 @@ import Enhance from "@/pages/enhance-resume";
 import Rating from "@/pages/rate-resume";
 import CoverLetter from "@/pages/cover-letter";
 import Roast from "@/pages/roast-resume";
+import Home from "@/pages/home";
+import NotFound from "@/components/not-found";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       {/* Redirect from root to dashboard */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Home />} />
 
       {/* Dashboard and its nested routes */}
       <Route path="/dashboard" element={<RootLayout />}>
@@ -28,6 +30,7 @@ export const router = createBrowserRouter(
         <Route path="roast-resume" element={<Roast />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );

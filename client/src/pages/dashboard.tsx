@@ -76,7 +76,7 @@ export default function Dashboard() {
             instant feedback, match job descriptions, and improve your chances.
           </p>
           <div className="mt-8 flex justify-center">
-            <Button onClick={() => onNavigate("/analyze")} size="lg">
+            <Button onClick={() => onNavigate("#feature")} size="lg">
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -85,7 +85,7 @@ export default function Dashboard() {
       </div>
 
       {/* Features Section */}
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-5xl" id="features">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">Our Features</h2>
           <p className="text-muted-foreground">
