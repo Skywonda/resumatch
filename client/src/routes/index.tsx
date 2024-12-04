@@ -13,15 +13,23 @@ import CoverLetter from "@/pages/cover-letter";
 import Roast from "@/pages/roast-resume";
 import Home from "@/pages/home";
 import NotFound from "@/components/not-found";
+import Auth from "@/pages/auth";
+import { PrivateRoute } from "@/components/auth/private-route";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      {/* Redirect from root to dashboard */}
       <Route path="/" element={<Home />} />
+      <Route path="/auth" element={<Auth />} />
 
-      {/* Dashboard and its nested routes */}
-      <Route path="/dashboard" element={<RootLayout />}>
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <RootLayout />
+          </PrivateRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="tailor-resume" element={<Tailor />} />
         <Route path="enhance-resume" element={<Enhance />} />

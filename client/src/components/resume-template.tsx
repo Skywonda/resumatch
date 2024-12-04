@@ -6,7 +6,7 @@ import { useResumeData } from "@/hooks/use-resume-data.hook";
 import { ProfessionalSummary, Experience, Skills, Education } from "./sections";
 import type { ResumeData } from "../types/resume";
 import { cn } from "@/lib/utils";
-import { useFullscreen } from "@/hooks/use-fullscreen.hoook";
+import { useFullscreen } from "@/hooks/use-fullscreen.hook";
 import { HeaderSection } from "./sections/header";
 import { FullscreenButton } from "./fullscreen-button";
 import { headerSectionData } from "@/mock/data";

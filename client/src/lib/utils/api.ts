@@ -7,12 +7,15 @@ export const FILE_TYPES = {
   TXT: "TXT",
 } as const;
 
-// eslint-disable-next-line import/no-anonymous-default-export
-
 const baseURL = import.meta.env.VITE_API_URL;
-const ApiService = axios.create({
+
+// Create separate instances for auth and resume APIs
+export const AuthService = axios.create({
+  baseURL: `${baseURL}/api/auth` || "http://localhost:8000/api/auth",
+});
+
+export const ApiService = axios.create({
   baseURL: `${baseURL}/api/resume` || "http://localhost:8000/api/resume",
-  // timeout: 30000,
 });
 
 ApiService.interceptors.request.use(async (config) => {
@@ -23,6 +26,51 @@ ApiService.interceptors.request.use(async (config) => {
   return config;
 });
 
+AuthService.interceptors.request.use(async (config) => {
+  const token = Cookies.get("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Auth APIs
+export const initiateEmailLogin = async (email: string) => {
+  const { data } = await AuthService.post("/login/email/initiate", { email });
+  return data;
+};
+
+export const verifyEmailLogin = async (email: string, code: string) => {
+  const { data } = await AuthService.post("/login/email/verify", {
+    email,
+    code,
+  });
+  if (data.token) {
+    Cookies.set("token", data.token);
+  }
+  return data;
+};
+
+export const checkAuthStatus = async () => {
+  try {
+    const { data } = await AuthService.get<{
+      isAuthenticated: boolean;
+      user: {
+        id: string;
+        email: string;
+        name?: string;
+      };
+    }>("/status");
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      Cookies.remove("token");
+    }
+    throw error;
+  }
+};
+
+// Resume APIs
 export const resumeEnhancement = async (resume: string, level: string) => {
   const { data } = await ApiService.post<{ data: string }>("/enhance", {
     resumeText: resume,
@@ -69,21 +117,6 @@ export const generateCoverLetter = async (
   return { data: data };
 };
 
-export const generateJobApplicationQuestionAnswer = async (
-  resume: string,
-  question: string
-) => {
-  const { data } = await ApiService.post<{ data: string }>(
-    "/resume-ranker/job-application-question",
-    {
-      resume,
-      question,
-    }
-  );
-
-  return data.data;
-};
-
 export const roastMyResume = async (resume: string) => {
   const { data } = await ApiService.post<{ data: string }>("roast", {
     resumeText: resume,
@@ -92,26 +125,19 @@ export const roastMyResume = async (resume: string) => {
   return { data: data };
 };
 
-export const generateResumeFile = async ({
-  resume,
-  type,
-}: {
-  resume: string;
-  type?: keyof typeof FILE_TYPES;
-}) => {
-  const url =
-    type === "PDF"
-      ? "/resume-ranker/generate-resume-pdf"
-      : "/resume-ranker/generate-resume-docx";
-  const { data } = await ApiService.post<Blob>(
-    url,
-    {
-      resume,
-    },
-    {
-      responseType: "blob",
-    }
-  );
+// Error handling helper
+export const handleApiError = (error: unknown): string => {
+  if (axios.isAxiosError(error)) {
+    return error.response?.data?.message || "An error occurred";
+  }
+  return "An unexpected error occurred";
+};
 
-  return data;
+export const isAuthenticated = async (): Promise<boolean> => {
+  try {
+    const { isAuthenticated } = await checkAuthStatus();
+    return isAuthenticated;
+  } catch {
+    return false;
+  }
 };

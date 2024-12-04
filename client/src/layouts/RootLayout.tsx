@@ -2,6 +2,7 @@ import { Outlet, NavLink } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { FileText, Target, Stars, Flame, FileEdit, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UserMenu } from "@/components/user-menu";
 
 interface NavigationItem {
   path: string;
@@ -56,7 +57,7 @@ export function RootLayout() {
             <div className="flex shrink-0 items-center gap-2">
               <FileText className="h-5 w-5" />
               <a href="/dashboard" className="font-bold">
-                ResuMatch AI
+                RM
               </a>
             </div>
 
@@ -91,6 +92,9 @@ export function RootLayout() {
                 )}
               </div>
             </nav>
+            <div className="flex shrink-0 items-center">
+              <UserMenu />
+            </div>
 
             {/* Right Section - Fixed */}
             <div className="flex shrink-0 items-center gap-4">

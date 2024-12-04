@@ -64,7 +64,6 @@ export default function Dashboard() {
   const onNavigate = useNavigate();
   return (
     <div className="container relative">
-      {/* Hero Section */}
       <div className="relative space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-16">
         <div className="mx-auto max-w-[64rem] text-center">
           <h1 className="font-heading text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
@@ -84,7 +83,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Features Section */}
       <div className="mx-auto max-w-5xl" id="features">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">Our Features</h2>
