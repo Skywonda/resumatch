@@ -65,6 +65,7 @@ export const checkAuthStatus = async () => {
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       Cookies.remove("token");
+      localStorage.removeItem("token");
     }
     throw error;
   }
