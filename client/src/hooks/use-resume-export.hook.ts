@@ -1,90 +1,71 @@
-import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import type { ResumeData } from "@/types/resume";
 
 export type ExportFormat = "pdf" | "docx";
-
-function constructResumeHtml(resume: string) {
-  return ` 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Resume</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body>
-      ${resume}
-    </body>
-  </html>`;
-}
-
-function triggerFileDownload(
-  file: Blob,
-  ext: "pdf" | "docx",
-  name: string = "resume"
-) {
-  const link = document.createElement("a");
-  const fileURL = URL.createObjectURL(file);
-  link.href = fileURL;
-  link.setAttribute("download", `${name}.${ext}`);
-  document.body.appendChild(link);
-  link.click();
-  URL.revokeObjectURL(link.href);
-  document.body.removeChild(link);
-}
 
 export function useResumeExport() {
   const exportToPdf = async () => {
     try {
       const resumeElement = document.getElementById("resume-content");
-      if (!resumeElement) throw new Error("Resume content not found");
+      if (!resumeElement) {
+        throw new Error(
+          "Resume content not found. Please ensure the resume is properly loaded."
+        );
+      }
 
-      const htmlContent = constructResumeHtml(resumeElement.outerHTML);
+      // Wait for any potential images to load
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
+      const canvas = await html2canvas(resumeElement, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        windowWidth: resumeElement.scrollWidth,
+        windowHeight: resumeElement.scrollHeight,
+        onclone: (doc) => {
+          const clonedResume = doc.getElementById("resume-content");
+          if (clonedResume) {
+            clonedResume.style.visibility = "visible";
+            clonedResume.style.width = `${resumeElement.scrollWidth}px`;
+            clonedResume.style.height = `${resumeElement.scrollHeight}px`;
+          }
+        },
+      });
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
+
+      // A4 dimensions in pts (72 per inch)
+      const pdfWidth = 595.28;
+      const pdfHeight = 841.89;
+
+      // Create PDF
       const pdf = new jsPDF({
-        format: "a4",
+        orientation: "portrait",
         unit: "pt",
-        hotfixes: ["px_scaling"],
-        compress: true,
+        format: "a4",
       });
 
-      await pdf.html(htmlContent, {
-        html2canvas: {
-          scale: 2, // Higher scale for better quality
-          useCORS: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-          windowWidth: 800, // Match your resume max-width
-          removeContainer: true,
-          scrollX: 0,
-          scrollY: 0,
-          imageTimeout: 0,
-          onclone: (doc) => {
-            const element = doc.getElementById("resume-content");
-            if (element) {
-              element.style.transform = "none";
-              element.style.padding = "40px";
-              element.style.margin = "0";
-            }
-          },
-        },
-        margin: [40, 40, 40, 40],
-        x: 0,
-        y: 0,
-        width: 595.28, // A4 width in points
-        autoPaging: "text",
-        image: { type: "jpeg", quality: 1 },
-        callback: function (doc) {
-          const pdfBlob = new Blob([doc.output("blob")], {
-            type: "application/pdf",
-          });
-          triggerFileDownload(pdfBlob, "pdf");
-        },
-      });
+      // Calculate scaling to fit A4
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const scaledWidth = imgWidth * ratio;
+      const scaledHeight = imgHeight * ratio;
+      const xOffset = (pdfWidth - scaledWidth) / 2;
+      const yOffset = (pdfHeight - scaledHeight) / 2;
+
+      // Add image to PDF and save
+      pdf.addImage(imgData, "PNG", xOffset, yOffset, scaledWidth, scaledHeight);
+      pdf.save("resume.pdf");
     } catch (error) {
       console.error("PDF export failed:", error);
-      throw error instanceof Error ? error : new Error("PDF export failed");
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : "Failed to export PDF. Please try again."
+      );
     }
   };
 
